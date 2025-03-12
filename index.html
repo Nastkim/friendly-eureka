@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2487.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;PuRauma&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.star { font-size: 2rem; cursor: pointer; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.selected { color: gold; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.hidden { display: none; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#results { position: relative; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.firework { position: absolute; width: 10px; height: 10px; background: gold; animation: explode 1s linear infinite; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes explode { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(3); } }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Header --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="w-full text-center bg-gray-800 p-4 text-xl font-bold"&gt;PuRauma&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Voting Cards --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="card-container" class="relative w-11/12 max-w-md bg-gray-800 p-6 rounded-lg shadow-lg text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2 id="card-title" class="text-2xl font-bold"&gt;&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p id="card-desc" class="text-sm mt-2"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="mt-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="star" data-value="1"&gt;☆&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="star" data-value="2"&gt;☆&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="star" data-value="3"&gt;☆&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="star" data-value="4"&gt;☆&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;span class="star" data-value="5"&gt;☆&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="next-btn" class="mt-6 bg-blue-500 px-4 py-2 rounded"&gt;Next →&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Submit Button --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="submit-btn" class="mt-6 bg-green-500 px-6 py-2 rounded hidden"&gt;Submit&lt;/button&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Waiting for Results --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="waiting" class="hidden text-center mt-6 text-lg"&gt;⌛ Waiting for results...&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Results Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="results" class="hidden mt-6 text-center text-xl"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const cards = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ name: "Bekky &amp; Shoham", desc: "Lorem ipsum..." },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ name: "Nastya &amp; Tomer", desc: "Lorem ipsum..." },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ name: "Avi &amp; Yonatan", desc: "Lorem ipsum..." },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ name: "Tali &amp; Yossi", desc: "Lorem ipsum..." },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ name: "Dalya &amp; Yonatan", desc: "Lorem ipsum..." },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ name: "Michal &amp; Matan", desc: "Lorem ipsum..." }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let currentIndex = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let votes = {};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let voterId = Math.random().toString(36).substr(2, 9);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const cardTitle = document.getElementById("card-title");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const cardDesc = document.getElementById("card-desc");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const nextBtn = document.getElementById("next-btn");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const submitBtn = document.getElementById("submit-btn");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const stars = document.querySelectorAll(".star");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadCard(index) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardTitle.textContent = cards[index].name;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardDesc.textContent = cards[index].desc;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stars.forEach(star =&gt; star.classList.remove("selected"));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (votes[cards[index].name]) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for (let i = 0; i &lt; votes[cards[index].name]; i++) stars[i].classList.add("selected");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>stars.forEach(star =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>star.addEventListener("click", () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const rating = parseInt(star.dataset.value);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>votes[cards[currentIndex].name] = rating;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>stars.forEach((s, i) =&gt; s.classList.toggle("selected", i &lt; rating));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>nextBtn.addEventListener("click", () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!votes[cards[currentIndex].name]) return alert("Please rate before continuing!");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentIndex++;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (currentIndex &lt; cards.length) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>loadCard(currentIndex);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById("card-container").classList.add("hidden");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>submitBtn.classList.remove("hidden");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>submitBtn.addEventListener("click", async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>submitBtn.classList.add("hidden");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("waiting").classList.remove("hidden");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const endpoint = "YOUR_DEPLOYED_GOOGLE_SCRIPT_URL";</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let [card, rating] of Object.entries(votes)) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>await fetch(endpoint, {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>method: "POST",</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>body: JSON.stringify({ voterId, card, rating }),</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>headers: { "Content-Type": "application/json" }</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showResults(scores) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("waiting").classList.add("hidden");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const results = document.getElementById("results");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>results.classList.remove("hidden");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>results.innerHTML = "&lt;h2&gt;Final Results&lt;/h2&gt;" + Object.entries(scores)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.map(([card, avg]) =&gt; `&lt;p&gt;${card}: ${avg.toFixed(2)} ⭐&lt;/p&gt;`)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>.join("");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; 30; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let fw = document.createElement("div");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>fw.classList.add("firework");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>fw.style.left = Math.random() * 100 + "%";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>fw.style.top = Math.random() * 100 + "%";</p>
+<p class="p1"><span class="Apple-converted-space">                </span>results.appendChild(fw);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; fw.remove(), 1000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>loadCard(currentIndex);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Simulated results (replace with real data)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showResults({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"Bekky &amp; Shoham": 4.3,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"Nastya &amp; Tomer": 3.8,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"Avi &amp; Yonatan": 4.5,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"Tali &amp; Yossi": 4.1,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"Dalya &amp; Yonatan": 4.2,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>"Michal &amp; Matan": 3.9</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}, 20000); // Fake results appear after 20s</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
